@@ -1,4 +1,12 @@
 package com.truongdc21.mediaplaymusic.Model
 
-data class Song (val nameSong : String)
+import java.io.Serializable
+
+data class Song (
+    val IdSong : Int,
+    val Title : String,
+    val Singer : String,
+    val UriImg : String,
+    val Uri : String
+    ): Serializable
 
