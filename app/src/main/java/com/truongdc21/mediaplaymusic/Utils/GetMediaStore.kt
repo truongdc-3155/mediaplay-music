@@ -1,14 +1,14 @@
-package com.truongdc21.mediaplaymusic.Unit
+package com.truongdc21.mediaplaymusic.Utils
 import android.provider.MediaStore
 
 import android.content.ContentResolver
-import android.content.Context
-import android.util.Log
 import com.truongdc21.mediaplaymusic.Model.Song
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 object GetMediaStore {
-
-    fun getListMusic(contentResolver: ContentResolver): MutableList<Song>{
+     fun getListMusic(contentResolver: ContentResolver) = CoroutineScope(Dispatchers.IO).async{
         val mListMusic = mutableListOf<Song>()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + "!=0"
@@ -32,6 +32,6 @@ object GetMediaStore {
                 }
             }
         }
-        return mListMusic
+        return@async mListMusic
     }
 }

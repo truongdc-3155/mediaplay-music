@@ -1,11 +1,10 @@
 package com.truongdc21.mediaplaymusic
 
 import android.app.Application
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import com.truongdc21.mediaplaymusic.Unit.Contans
+import com.truongdc21.mediaplaymusic.Utils.Constance
 
 class MyApplication : Application() {
     companion object {
@@ -19,7 +18,7 @@ class MyApplication : Application() {
 
     private fun createChanelNotification() {
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val chanel = NotificationChannel(Contans.CHANEL_ID , "Chanel Play Music",
+            val chanel = NotificationChannel(Constance.CHANEL_ID , "Chanel Play Music",
                 NotificationManager.IMPORTANCE_HIGH)
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(chanel)
