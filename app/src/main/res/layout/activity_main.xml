@@ -16,7 +16,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <LinearLayout
         android:id="@+id/viewPlayMusic"
         android:layout_width="match_parent"
@@ -39,12 +38,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorf4" >
-                    <ImageView
-                        android:id="@+id/imgUriMusic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        />
+                android:background="@color/colorf4">
+
+                <ImageView
+                    android:id="@+id/imgUriMusic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -55,39 +54,59 @@
 
             <TextView
                 android:id="@+id/tvNameOfSong"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
-                android:text="Name of song"
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="@dimen/text_Size_Medium"
                 android:textStyle="bold" />
 
             <SeekBar
-                android:layout_weight="1"
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tvShowTimePlayingMusic"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/margin_3"
-                android:text="4:00" />
+                android:layout_weight="1" />
 
             <LinearLayout
-                android:layout_weight="1"
-                android:paddingStart="@dimen/padding_3"
-                android:paddingEnd="@dimen/padding_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/padding_2">
 
+                <TextView
+                    android:id="@+id/tvShowTimePlayingMusic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_3"
+                    android:text="" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvShowTimeEND"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/margin_3"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/padding_3"
+                android:paddingEnd="@dimen/padding_3">
 
                 <ImageView
                     android:id="@+id/btnPreviousMusic"

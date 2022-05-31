@@ -30,7 +30,7 @@ class MusicService : Service() {
 
     private var mediaPlayer : MediaPlayer? = null
     private var isPlaying : Boolean = false
-    private var PositionSong = 0
+    private var mPositionSong = 0
     private var mListSong = mutableListOf<Song>()
     private var managerCompat : NotificationManagerCompat? = null
 
@@ -38,19 +38,18 @@ class MusicService : Service() {
         super.onCreate()
         managerCompat = NotificationManagerCompat.from(this)
     }
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
+
+    override fun onBind(p0: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val bundle = intent?.extras
-        if (bundle != null) {
-            mListSong = bundle.get(Constance.OBJECT_LIST_SONG) as MutableList<Song>
-            PositionSong = bundle.getInt(Constance.OBJECT_POSITION_SONG)
-            startMusic(PositionSong)
-            mediaPlayer?.seekTo(bundle.getInt(Constance.SEEKBAR_PROGRESS ))
-            Log.d("test" , "TEST TIME PR : ${bundle.getInt(Constance.SEEKBAR_PROGRESS )} ")
+        bundle?.let {
+            mListSong = it.get(Constance.OBJECT_LIST_SONG) as MutableList<Song>
+            mPositionSong = it.getInt(Constance.OBJECT_POSITION_SONG)
+            startMusic(mPositionSong)
+            mediaPlayer?.seekTo(it.getInt(Constance.SEEKBAR_PROGRESS ))
         }
+
         intent?.action?.let { listenerActionMusic(it) }
         mediaPlayer?.setOnCompletionListener { actionNext() }
         return START_NOT_STICKY
@@ -70,6 +69,7 @@ class MusicService : Service() {
             prepare()
             start()
         }
+        getPendingItent(applicationContext , Constance.ACTION_START)
         isPlaying = true
         sendNotification()
         sendActiontoMain(Constance.ACTION_START)
@@ -81,8 +81,8 @@ class MusicService : Service() {
         val mediaSessionCompat = MediaSessionCompat(this, "tag")
         val notification = NotificationCompat.Builder(this, Constance.CHANEL_ID).apply {
              setSmallIcon(R.drawable.ic_small_music)
-             setContentTitle(mListSong[PositionSong].Title)
-             setContentText(mListSong[PositionSong].Singer)
+             setContentTitle(mListSong[mPositionSong].Title)
+             setContentText(mListSong[mPositionSong].Singer)
              setLargeIcon(bitmap)
              addAction(R.drawable.ic_back , "Previous" , getPendingItent(this@MusicService , Constance.ACTION_PREVIOUS))
              if (isPlaying) addAction(R.drawable.ic_pause2 , "Pause", getPendingItent(this@MusicService , Constance.ACTION_PAUSE) )
@@ -101,6 +101,7 @@ class MusicService : Service() {
     private fun listenerActionMusic (action : String ) {
         Constance.apply {
             when(action){
+                ACTION_START -> actionStart()
                 ACTION_PREVIOUS -> actionPrevious()
                 ACTION_PAUSE -> actionPause()
                 ACTION_NEXT -> actionNext()
@@ -110,17 +111,20 @@ class MusicService : Service() {
         }
     }
 
+    private fun actionStart () {
+        sendActiontoMain(Constance.ACTION_START)
+    }
     private fun actionPrevious() {
-        PositionSong -= 1
-        if (PositionSong < 0) {
-            PositionSong = mListSong.size -1
+        mPositionSong -= 1
+        if (mPositionSong < 0) {
+            mPositionSong = mListSong.size -1
         }
-        startMusic(PositionSong)
+        startMusic(mPositionSong)
         sendActiontoMain(Constance.ACTION_PREVIOUS)
     }
     private fun actionNext() {
-        PositionSong = (PositionSong + 1) % mListSong.size
-        startMusic(PositionSong)
+        mPositionSong = (mPositionSong + 1) % mListSong.size
+        startMusic(mPositionSong)
         sendActiontoMain(Constance.ACTION_NEXT)
     }
 
@@ -157,13 +161,12 @@ class MusicService : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
-
     }
 
     private fun sendActiontoMain(action: String){
         val intent = Intent(Constance.ACTION_SEND_TO_MAIN)
         val bundle = Bundle().apply {
-            putInt(Constance.POSITION_SONG , PositionSong)
+            putInt(Constance.POSITION_SONG , mPositionSong)
             putBoolean(Constance.STATUS_SONG , isPlaying)
             putString(Constance.ACTION_MUSIC , action)
             mediaPlayer?.duration?.let { putInt(Constance.ACTION_SEND_TIME_END , it) }
@@ -182,7 +185,6 @@ class MusicService : Service() {
                 handler.postDelayed(this, 1000)
             }
         } , 0)
-
     }
 
     override fun onDestroy() {
@@ -193,6 +195,5 @@ class MusicService : Service() {
         }
         managerCompat?.cancel(Constance.CHANEL_COMPAT)
     }
-
 }
 

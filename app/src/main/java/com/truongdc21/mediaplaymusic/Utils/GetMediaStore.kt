@@ -8,12 +8,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
 object GetMediaStore {
-     fun getListMusic(contentResolver: ContentResolver) = CoroutineScope(Dispatchers.IO).async{
+
+     fun getListMusic(contentResolver: ContentResolver) : MutableList<Song>{
         val mListMusic = mutableListOf<Song>()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + "!=0"
-        val cursor = contentResolver.query(uri,null,selection,null,null)
-        if (cursor != null){
+        val curSor = contentResolver.query(uri,null,selection,null,null)
+        curSor?.let { cursor ->
             while(cursor.moveToNext()){
                 with(cursor){
                     val Id =if (getColumnIndex(MediaStore.Audio.Media._ID)<0) ""
@@ -32,6 +33,6 @@ object GetMediaStore {
                 }
             }
         }
-        return@async mListMusic
+        return mListMusic
     }
 }

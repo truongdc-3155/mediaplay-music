@@ -7,18 +7,15 @@ import android.os.Build
 import com.truongdc21.mediaplaymusic.Utils.Constance
 
 class MyApplication : Application() {
-    companion object {
-        const val CHANEL_ID = "playmusic_service"
-    }
+
     override fun onCreate() {
         super.onCreate()
-
-            createChanelNotification()
+        createChanelNotification()
     }
 
     private fun createChanelNotification() {
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val chanel = NotificationChannel(Constance.CHANEL_ID , "Chanel Play Music",
+            val chanel = NotificationChannel(Constance.CHANEL_ID , Constance.CHANEL_PLAY_MUSIC,
                 NotificationManager.IMPORTANCE_HIGH)
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(chanel)
